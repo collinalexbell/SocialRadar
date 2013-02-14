@@ -70,8 +70,8 @@ public class TweetMap{
 		  if (markers.size() == 0) return;
 		  parent.fill(0);
 		  
-		  bottomMenu.drawTweet(markers.get(0).status.getText(), 100, 10, 500, 50);
-		  bottomMenu.drawAuthor(markers.get(0).status.getUser().getName()+ ", @" + markers.get(0).status.getUser().getScreenName(), 100, 40, 500, 50);
+		  //bottomMenu.drawTweet(markers.get(0).status.getText(), 100, 10, 500, 50);
+		  //bottomMenu.drawAuthor(markers.get(0).status.getUser().getName()+ ", @" + markers.get(0).status.getUser().getScreenName(), 100, 40, 500, 50);
 		  //bottomMenu.drawTime(time, 100, 70, 500, 50);
 		  if (markers.size() > 1){
 		    //Make a special selection menu

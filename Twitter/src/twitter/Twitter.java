@@ -50,9 +50,7 @@ UnfoldingMap map;
 TweetMap tweetMap;
 Menu bottomMenu;
 	
-	 public static void main(String args[]) {
-		    PApplet.main(new String[] { "twitter.Twitter" });
-		  }
+
 
 public void removeIt(PingMarker marker){
  markerManager.removeMarker(marker); 
@@ -65,7 +63,7 @@ public void removeIt(PingMarker marker){
 
 
 public void setup() {
-  size(1700,900);
+  size(950,700);
  
   
 
@@ -73,7 +71,7 @@ public void setup() {
   markerManager = new MarkerManager<Marker>();
   bottomMenu = new Menu(this);
 
-  map = new UnfoldingMap(this, "map", 750,0,950,700);
+  map = new UnfoldingMap(this, "map", 0,0,950,700);
   map.addMarkerManager(markerManager);
   map.setZoomRange(2,6);
   MapUtils.createDefaultEventDispatcher(this, map);

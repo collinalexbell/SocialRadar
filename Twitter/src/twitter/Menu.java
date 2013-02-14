@@ -9,12 +9,14 @@ public class Menu {
 	public Menu(PApplet p){
 		parent = p;
 		parent.fill(255);
-		parent.rect(0, 700, 1700, 200);
+		parent.rect(0, 700, 850, 200);
+		parent.line(750, 700, 750, 900);
 	}
 	
 	public void clear(){
 		parent.fill(255);
 		parent.rect(0, 700, 1700, 200);
+		parent.line(750, 700, 750, 900);
 	}
 	
 	public void drawTweet(String text, int x, int y, int w, int h){
@@ -36,4 +38,6 @@ public class Menu {
 		parent.text("Time: ",x, 700+ y, w, h);
 		parent.text(text, x + 50, 700+ y, w, h);
 	}
+	
+	
 }
