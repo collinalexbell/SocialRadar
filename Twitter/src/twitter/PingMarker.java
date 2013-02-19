@@ -23,7 +23,7 @@ public class PingMarker extends SimplePointMarker {
 	    parent = p;
 	    rad = 50;
 	    startTime = parent.millis();
-	    timeToDisapear = 30000;
+	    timeToDisapear = t.pingTime;
 	    transperancyRate = timeToDisapear/255;
 	    transValue =250;
 	    
@@ -52,5 +52,10 @@ public class PingMarker extends SimplePointMarker {
 	    pg.ellipse(x, y, 10, 10);
 	    pg.popStyle();
 	    
+	  }
+	  
+	  public void changeTimeToDisappear(int t){
+		  timeToDisapear = t;
+		  transperancyRate = timeToDisapear/255;
 	  }
 }

@@ -3,6 +3,8 @@ package twitter;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JFrame;
+
 import de.fhpotsdam.unfolding.mapdisplay.*;
 import de.fhpotsdam.unfolding.utils.*;
 import de.fhpotsdam.unfolding.marker.*;
@@ -48,7 +50,13 @@ List<PingMarker> markerstodisplay;
 
 UnfoldingMap map;
 TweetMap tweetMap;
-Menu bottomMenu;
+MainJFrame parent;
+
+Twitter(MainJFrame p){
+	parent = p;
+	markerManager = new MarkerManager<Marker>();
+	tweetMap = new TweetMap(this, markerManager, parent);
+}
 	
 
 
@@ -60,7 +68,9 @@ public void removeIt(PingMarker marker){
 
 
 
-
+public TweetMap getTweetMap(){
+	return tweetMap;
+}
 
 public void setup() {
   size(950,700);
@@ -68,15 +78,14 @@ public void setup() {
   
 
   
-  markerManager = new MarkerManager<Marker>();
-  bottomMenu = new Menu(this);
+  
 
-  map = new UnfoldingMap(this, "map", 0,0,950,700);
+  map = new UnfoldingMap(this, "map", 0,0,1200,900);
   map.addMarkerManager(markerManager);
   map.setZoomRange(2,6);
   MapUtils.createDefaultEventDispatcher(this, map);
   
-  tweetMap = new TweetMap(this, markerManager);
+  
   
   OAuthConsumerKey = "5ZgQXBGYo4YSKLYxqM1XEA";
   OAuthConsumerSecret = "E9nSuU2uJ2IAz0YavqdfT4fIJAhMcXC4gJkD94qVAs";

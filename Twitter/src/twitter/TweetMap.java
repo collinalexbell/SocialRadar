@@ -3,6 +3,8 @@ package twitter;
 import twitter4j.*;
 import java.util.*;
 
+import javax.swing.JFrame;
+
 import de.fhpotsdam.unfolding.marker.Marker;
 import de.fhpotsdam.unfolding.marker.MarkerManager;
 
@@ -16,11 +18,14 @@ public class TweetMap{
 	  int size;
 	  List<PingMarker> markerstodisplay;
 	  MarkerManager<Marker> markerManager;
-	  Menu bottomMenu;
+	 MainJFrame frame;
+	 int pingTime;
+	 
 	  
-	  TweetMap(PApplet p, MarkerManager<Marker> m){
-	    parent = p;
-	    bottomMenu = new Menu(parent);
+	  TweetMap(PApplet p, MarkerManager<Marker> m, MainJFrame f){
+	    pingTime = 30000;
+		parent = p;
+	    frame = f;
 	    markerstodisplay = new ArrayList<PingMarker>();
 		size = 0;
 		markerManager = m;
@@ -66,11 +71,10 @@ public class TweetMap{
 	  
 	  public void displayTweet(List<PingMarker> markers){
 		  String time;
-		  bottomMenu.clear();
 		  if (markers.size() == 0) return;
 		  parent.fill(0);
 		  
-		  //bottomMenu.drawTweet(markers.get(0).status.getText(), 100, 10, 500, 50);
+		  frame.updateTweet(markers.get(0).status.getText());
 		  //bottomMenu.drawAuthor(markers.get(0).status.getUser().getName()+ ", @" + markers.get(0).status.getUser().getScreenName(), 100, 40, 500, 50);
 		  //bottomMenu.drawTime(time, 100, 70, 500, 50);
 		  if (markers.size() > 1){
@@ -80,6 +84,31 @@ public class TweetMap{
 	  
 	  public void draw(){
 		  displayTweet(markerstodisplay);
+	  }
+	  
+	  public void setTimeToDisappear(int millsec){
+		  if(millsec != 0){
+			  pingTime = millsec;
+			  List<Marker> l = markerManager.getMarkers();
+			  for (Marker m: l){
+				  if(m instanceof PingMarker){
+					  PingMarker marker = (PingMarker)m;
+					  marker.changeTimeToDisappear(millsec);
+					 
+				  }
+			  }
+		  }
+		  else{
+			  pingTime = 1000;
+			  List<Marker> l = markerManager.getMarkers();
+			  for (Marker m: l){
+				  if(m instanceof PingMarker){
+					  PingMarker marker = (PingMarker)m;
+					  marker.changeTimeToDisappear(1000);
+					 
+				  }
+			  }
+		  }
 	  }
 	  
 	  /*ArrayList<Ping> getPings(){
