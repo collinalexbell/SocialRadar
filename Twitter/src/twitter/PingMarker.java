@@ -17,8 +17,9 @@ public class PingMarker extends SimplePointMarker {
 	  PApplet parent;
 	  Status status;
 	  TweetMap tweetMap;
-	  public PingMarker(PApplet p, de.fhpotsdam.unfolding.geo.Location location, TweetMap t) {
+	  public PingMarker(PApplet p, de.fhpotsdam.unfolding.geo.Location location, TweetMap t, Status s) {
 	    super(location);
+	    status = s;
 	    tweetMap = t;
 	    parent = p;
 	    rad = 50;

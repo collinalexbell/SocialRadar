@@ -58,5 +58,6 @@
 	<classpathentry kind="lib" path="lib/user/Twitter4j/twitter4j-examples-3.0.3.jar"/>
 	<classpathentry kind="lib" path="lib/user/Twitter4j/twitter4j-media-support-3.0.3.jar"/>
 	<classpathentry kind="lib" path="lib/user/Twitter4j/twitter4j-stream-3.0.3.jar"/>
+	<classpathentry kind="lib" path="forms-1.3.0.jar" sourcepath="forms-1.3.0-src.zip"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -20,7 +20,7 @@ public class TweetMap{
 	  MarkerManager<Marker> markerManager;
 	 MainJFrame frame;
 	 int pingTime;
-	 
+	 TopWord wordfq;
 	  
 	  TweetMap(PApplet p, MarkerManager<Marker> m, MainJFrame f){
 	    pingTime = 30000;
@@ -31,6 +31,7 @@ public class TweetMap{
 		markerManager = m;
 	    statuses = new ArrayList<Status>();
 	    markersToDelete = new ArrayList<PingMarker>();
+	    wordfq = new TopWord(this);
 	    //pings = new ArrayList<Ping>();
 	  }
 	  void addMarkersToDelete(PingMarker marker){
@@ -40,6 +41,9 @@ public class TweetMap{
 	    for (int i = 0; i < markersToDelete.size(); i++){
 	      if(markerManager.removeMarker(markersToDelete.get(i))){
 	       System.out.println("Removed Marker"); 
+	       if(statuses.remove(markersToDelete.get(i).status)){
+	    	   System.out.println("Removed Status");
+	       }
 	      }
 	    }
 	    markersToDelete.clear();
@@ -47,6 +51,9 @@ public class TweetMap{
 	  
 	  void addStatus(Status status){
 	    statuses.add(status);
+	    wordfq.addStatus(status);
+	    wordfq.printTopWords(10);
+	    frame.updateTopWord();
 	    //de.fhpotsdam.unfolding.geo.Location myloc = new  de.fhpotsdam.unfolding.geo.Location(status.getGeoLocation().getLatitude(), status.getGeoLocation().getLongitude());
 	    //ScreenPosition pos = map.getScreenPosition(myloc);
 	    //pings.add(new Ping(pos.x, pos.y ,20));
@@ -109,6 +116,10 @@ public class TweetMap{
 				  }
 			  }
 		  }
+	  }
+	  
+	  public String getTopWords(int i){
+		  return wordfq.stringTopWords(i);
 	  }
 	  
 	  /*ArrayList<Ping> getPings(){

@@ -182,7 +182,7 @@ public void draw() {
     double lon = location.getLongitude();
     
     de.fhpotsdam.unfolding.geo.Location newLocation = new de.fhpotsdam.unfolding.geo.Location(lat, lon);
-    PingMarker tweetMarker = new PingMarker(this, newLocation, tweetMap);
+    PingMarker tweetMarker = new PingMarker(this, newLocation, tweetMap, currentStatus);
     tweetMarker.status = currentStatus;
     markerManager.addMarker(tweetMarker);
   }

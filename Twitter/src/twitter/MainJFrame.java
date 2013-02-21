@@ -29,9 +29,11 @@ public class MainJFrame extends JFrame {
 
 	private JPanel contentPane;
 	JTextPane textPane;
+	JTextPane topWords;
 	String prevTweet;
 	TweetMap tweetMap;
 	JLabel timeLabel;
+	JPanel rightSide;
 
 	/**
 	 * Launch the application.
@@ -70,9 +72,11 @@ public class MainJFrame extends JFrame {
         sketch.screen = new Dimension(950, 700);
         Map.add(sketch);
         
-        
+        rightSide = new JPanel();
         
         JPanel Menue = new JPanel();
+        
+        JPanel words = new JPanel();
         
         JPanel Tweet = new JPanel();
         
@@ -82,11 +86,18 @@ public class MainJFrame extends JFrame {
         
         textPane.setBackground(this.getBackground());
         
-
+        topWords = new JTextPane();
+        topWords.setEditable(false);
+        
+        topWords.setBackground(this.getBackground());
 
         Tweet.add(textPane);
         contentPane.add(Tweet, BorderLayout.SOUTH);
-        contentPane.add(Menue, BorderLayout.EAST);
+        contentPane.add(rightSide, BorderLayout.EAST);
+        rightSide.setLayout(new BoxLayout(rightSide, BoxLayout.Y_AXIS));
+        rightSide.add(Menue);
+        rightSide.add(words);
+        words.add(topWords);
         
         JLabel lblTweetDisplayTime = new JLabel("Tweet Display Time");
         Menue.add(lblTweetDisplayTime);
@@ -126,5 +137,9 @@ public class MainJFrame extends JFrame {
 			textPane.setText("Tweet: " + text);
 		}
 		prevTweet = text;
+	}
+	
+	public void updateTopWord(){
+		topWords.setText(tweetMap.getTopWords(10));
 	}
 }
