@@ -1,12 +1,18 @@
 package twitter;
+
+import search.*;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -22,6 +28,9 @@ import java.awt.GridLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JLabel;
 
 
@@ -34,6 +43,10 @@ public class MainJFrame extends JFrame {
 	TweetMap tweetMap;
 	JLabel timeLabel;
 	JPanel rightSide;
+	String keyword;
+	JLabel searchLabel;
+	JTextField keySearch;
+	SearchPanel searchPanel;
 
 	/**
 	 * Launch the application.
@@ -55,12 +68,13 @@ public class MainJFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public MainJFrame() {
+		searchPanel = new SearchPanel(this);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		this.setSize(1400, 900);
+		this.setSize(1600, 900);
         contentPane.setLayout(new BorderLayout(0, 0));
         
         javax.swing.JPanel Map = new javax.swing.JPanel();
@@ -80,16 +94,47 @@ public class MainJFrame extends JFrame {
         
         JPanel Tweet = new JPanel();
         
+        JPanel SearchFilter = new JPanel();
         
-        textPane = new JTextPane();
+       
+        
+        
+        textPane = new JTextPane(); 
+        
+        
         textPane.setEditable(false);
         
         textPane.setBackground(this.getBackground());
+        
+         keySearch = new JTextField();
+        keySearch.setColumns(10); 
+        keySearch.setEditable(true);
+        
+        searchLabel = new JLabel ("Search terms:");
+        
+        
+        JButton searchButton = new JButton ("Submit");
+
+            ActionListener submitListener = new ActionListener() {
+              public void actionPerformed(ActionEvent actionEvent) {
+            	  String [] terms = new String[1];
+            	  terms[0] = keySearch.getText();
+            	  System.out.println(keySearch.getText());
+              }
+            };
+            
+       searchButton.addActionListener(submitListener);
+        
+       SearchFilter.add(searchLabel);
+       SearchFilter.add(keySearch);
+       SearchFilter.add(searchButton);
+        
         
         topWords = new JTextPane();
         topWords.setEditable(false);
         
         topWords.setBackground(this.getBackground());
+               
 
         Tweet.add(textPane);
         contentPane.add(Tweet, BorderLayout.SOUTH);
@@ -97,6 +142,8 @@ public class MainJFrame extends JFrame {
         rightSide.setLayout(new BoxLayout(rightSide, BoxLayout.Y_AXIS));
         rightSide.add(Menue);
         rightSide.add(words);
+        rightSide.add(searchPanel);
+        
         words.add(topWords);
         
         JLabel lblTweetDisplayTime = new JLabel("Tweet Display Time");
@@ -128,6 +175,9 @@ public class MainJFrame extends JFrame {
         
         timeLabel = new JLabel("30");
         Menue.add(timeLabel);
+        
+        JCheckBox indeff = new JCheckBox("Indefinitly");
+        Menue.add(indeff);
         sketch.init(); //this is the function used to start the execution of the sketch
         this.setVisible(true);
 	}
@@ -140,6 +190,11 @@ public class MainJFrame extends JFrame {
 	}
 	
 	public void updateTopWord(){
-		topWords.setText(tweetMap.getTopWords(10));
+		topWords.setText(tweetMap.getTopWords(20));
+	}
+	
+	public void updateFilter(){
+		String terms[] = searchPanel.getTerms().toArray(new String[searchPanel.getTermsSize()]);
+		tweetMap.parent.updateSearchTerm(terms);
 	}
 }

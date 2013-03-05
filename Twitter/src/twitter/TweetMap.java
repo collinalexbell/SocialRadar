@@ -11,7 +11,7 @@ import de.fhpotsdam.unfolding.marker.MarkerManager;
 import processing.core.*;
 
 public class TweetMap{
-	  PApplet parent;
+	  Twitter parent;
 	  ArrayList<Status> statuses;
 	  ArrayList<PingMarker> markersToDelete;
 	  //ArrayList<Ping> pings;
@@ -22,7 +22,7 @@ public class TweetMap{
 	 int pingTime;
 	 TopWord wordfq;
 	  
-	  TweetMap(PApplet p, MarkerManager<Marker> m, MainJFrame f){
+	  TweetMap(Twitter p, MarkerManager<Marker> m, MainJFrame f){
 	    pingTime = 30000;
 		parent = p;
 	    frame = f;
@@ -52,7 +52,7 @@ public class TweetMap{
 	  void addStatus(Status status){
 	    statuses.add(status);
 	    wordfq.addStatus(status);
-	    wordfq.printTopWords(10);
+	    //wordfq.printTopWords(10);
 	    frame.updateTopWord();
 	    //de.fhpotsdam.unfolding.geo.Location myloc = new  de.fhpotsdam.unfolding.geo.Location(status.getGeoLocation().getLatitude(), status.getGeoLocation().getLongitude());
 	    //ScreenPosition pos = map.getScreenPosition(myloc);
@@ -79,7 +79,7 @@ public class TweetMap{
 	  public void displayTweet(List<PingMarker> markers){
 		  String time;
 		  if (markers.size() == 0) return;
-		  parent.fill(0);
+		  //parent.fill(0);
 		  
 		  frame.updateTweet(markers.get(0).status.getText());
 		  //bottomMenu.drawAuthor(markers.get(0).status.getUser().getName()+ ", @" + markers.get(0).status.getUser().getScreenName(), 100, 40, 500, 50);
