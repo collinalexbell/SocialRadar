@@ -47,6 +47,8 @@ public class MainJFrame extends JFrame {
 	JLabel searchLabel;
 	JTextField keySearch;
 	SearchPanel searchPanel;
+	JCheckBox indeff;	
+	JSlider slider;
 
 	/**
 	 * Launch the application.
@@ -68,13 +70,13 @@ public class MainJFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public MainJFrame() {
-		searchPanel = new SearchPanel(this);
+	
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		this.setSize(1600, 900);
+		this.setSize(1450, 780);
         contentPane.setLayout(new BorderLayout(0, 0));
         
         javax.swing.JPanel Map = new javax.swing.JPanel();
@@ -85,7 +87,7 @@ public class MainJFrame extends JFrame {
         Map.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
         sketch.screen = new Dimension(950, 700);
         Map.add(sketch);
-        
+    	searchPanel = new SearchPanel(this); 
         rightSide = new JPanel();
         
         JPanel Menue = new JPanel();
@@ -151,15 +153,16 @@ public class MainJFrame extends JFrame {
         
         
         
-        JSlider slider = new JSlider(0,200,30);
+        slider = new JSlider(0,200,30);
         
         
 		slider.addChangeListener(new ChangeListener(){
 			public void stateChanged(ChangeEvent e){
-			    JSlider source = (JSlider)e.getSource();
 			    //if (!source.getValueIsAdjusting()) {
-			    int millis = ((int)source.getValue())*1000;    
-			    tweetMap.setTimeToDisappear(millis);
+			    int millis = ((int)slider.getValue())*1000;    
+				if (!indeff.isSelected()){
+					tweetMap.setTimeToDisappear(millis);
+				}
 			    timeLabel.setText(((Integer)(millis/1000)).toString());
 			    
 			        
@@ -176,7 +179,26 @@ public class MainJFrame extends JFrame {
         timeLabel = new JLabel("30");
         Menue.add(timeLabel);
         
-        JCheckBox indeff = new JCheckBox("Indefinitly");
+        indeff = new JCheckBox("Indefinitly");
+        
+        ActionListener indeffListener = new ActionListener(){
+        	public void actionPerformed(ActionEvent e){
+        		if (indeff.isSelected()){
+        			tweetMap.setTimeToDisappear(-1);
+        		}
+        		else{
+			    JSlider source = slider; 
+			    //if (!source.getValueIsAdjusting()) {
+			    int millis = ((int)source.getValue())*1000;    
+				tweetMap.setTimeToDisappear(millis);
+			    timeLabel.setText(((Integer)(millis/1000)).toString());
+				}
+        			
+        	}
+        };
+        
+        indeff.addActionListener(indeffListener);
+        
         Menue.add(indeff);
         sketch.init(); //this is the function used to start the execution of the sketch
         this.setVisible(true);
@@ -196,5 +218,9 @@ public class MainJFrame extends JFrame {
 	public void updateFilter(){
 		String terms[] = searchPanel.getTerms().toArray(new String[searchPanel.getTermsSize()]);
 		tweetMap.parent.updateSearchTerm(terms);
+	}
+	
+	public TweetMap getTweetMap(){
+		return tweetMap;
 	}
 }

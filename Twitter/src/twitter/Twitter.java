@@ -1,5 +1,6 @@
 package twitter;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -160,15 +161,13 @@ public class Twitter extends PApplet{
 		//      filterQuery.locations(locations);
 
 		filterQuery = new FilterQuery();
-		double[][] locations = new double[2][2];
-		locations[0][0] = -180;
-		locations[0][1] = -90;
-		locations[1][0] = 180;
-		locations[1][1] = 90;
+		double[][] locations ={{-180, -90}, {180, 90}};
+		
+		filterQuery.locations(locations);
 		
 
-		//twitterStream.filter(filterQuery);
-		twitterStream.sample();
+		twitterStream.filter(filterQuery);
+		//twitterStream.sample();
 	}
 
 
@@ -193,9 +192,10 @@ public class Twitter extends PApplet{
 			GeoLocation location = currentStatus.getGeoLocation();
 			double lat = location.getLatitude();
 			double lon = location.getLongitude();
+			Color color = tweetMap.getStatusColor(currentStatus);
 
 			de.fhpotsdam.unfolding.geo.Location newLocation = new de.fhpotsdam.unfolding.geo.Location(lat, lon);
-			PingMarker tweetMarker = new PingMarker(this, newLocation, tweetMap, currentStatus);
+			PingMarker tweetMarker = new PingMarker(this, newLocation, tweetMap, currentStatus, color);
 			tweetMarker.status = currentStatus;
 			markerManager.addMarker(tweetMarker);
 		}
@@ -211,11 +211,13 @@ public class Twitter extends PApplet{
 		de.fhpotsdam.unfolding.geo.Location location = map.getLocation(mouseX, mouseY);
 		for (int i = 0; i < markers.size(); i++){
 			de.fhpotsdam.unfolding.geo.Location markerLocation = markers.get(i).getLocation();
-			ymax = markerLocation.getLat()+1;
-			ymin = markerLocation.getLat()-1;
-			xmax = markerLocation.getLon()+1;
-			xmin = markerLocation.getLon()-1;
-			if (location.getLat() < ymax && location.getLat() > ymin && location.getLon() < xmax && location.getLon() > xmin){
+			ScreenPosition loc = map.getScreenPosition(markerLocation);
+			
+			ymax = loc.y+5;
+			ymin = loc.y-5;
+			xmax = loc.x+5;
+			xmin = loc.x-5;
+			if (mouseY < ymax && mouseY > ymin && mouseX < xmax && mouseX > xmin){
 				markers.get(i).setSelected(true);
 			}
 			else{ 
@@ -232,6 +234,8 @@ public class Twitter extends PApplet{
 	public void updateSearchTerm(String [] terms){
 		if (terms.length > 0){
 			FilterQuery filterQuery = new FilterQuery();
+			double[][] locations ={{-180, -90}, {180, 90}};
+			//filterQuery.locations(locations);
 			filterQuery.track(terms);
 			twitterStream.filter(filterQuery);
 		}

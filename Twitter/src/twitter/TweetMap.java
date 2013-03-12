@@ -1,6 +1,9 @@
 package twitter;
 
+import search.SearchTerm;
 import twitter4j.*;
+
+import java.awt.Color;
 import java.util.*;
 
 import javax.swing.JFrame;
@@ -21,6 +24,7 @@ public class TweetMap{
 	 MainJFrame frame;
 	 int pingTime;
 	 TopWord wordfq;
+	 List<SearchTerm> terms;
 	  
 	  TweetMap(Twitter p, MarkerManager<Marker> m, MainJFrame f){
 	    pingTime = 30000;
@@ -32,6 +36,8 @@ public class TweetMap{
 	    statuses = new ArrayList<Status>();
 	    markersToDelete = new ArrayList<PingMarker>();
 	    wordfq = new TopWord(this);
+	    terms = new ArrayList<SearchTerm>();
+	    
 	    //pings = new ArrayList<Ping>();
 	  }
 	  void addMarkersToDelete(PingMarker marker){
@@ -106,7 +112,7 @@ public class TweetMap{
 			  }
 		  }
 		  else{
-			  pingTime = 1000;
+			  pingTime = -1;
 			  List<Marker> l = markerManager.getMarkers();
 			  for (Marker m: l){
 				  if(m instanceof PingMarker){
@@ -121,6 +127,25 @@ public class TweetMap{
 	  public String getTopWords(int i){
 		  return wordfq.stringTopWords(i);
 	  }
+	public Color getStatusColor(Status currentStatus) {
+		String text = currentStatus.getText();
+		text = text.toLowerCase();
+		if (terms.size() == 0){
+			return new Color(102, 0, 186, 250);
+		}else{
+			for (SearchTerm t: terms){
+				
+				if(text.contains(t.getTerm().toLowerCase())){
+					return t.getColor();
+				}
+			}
+		}
+		return new Color(102, 0, 186, 250);
+	}
+	
+	public void updateSearchTerms(List<SearchTerm> terms){
+		this.terms = terms;
+	}
 	  
 	  /*ArrayList<Ping> getPings(){
 	    return pings;
