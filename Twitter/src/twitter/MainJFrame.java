@@ -41,14 +41,14 @@ public class MainJFrame extends JFrame {
 	JTextPane topWords;
 	String prevTweet;
 	TweetMap tweetMap;
-	JLabel timeLabel;
+	JLabel timeLabel, rateLabel;
 	JPanel rightSide;
 	String keyword;
 	JLabel searchLabel;
 	JTextField keySearch;
 	SearchPanel searchPanel;
 	JCheckBox indeff;	
-	JSlider slider;
+	JSlider slider, rateSlider;
 
 	/**
 	 * Launch the application.
@@ -91,6 +91,8 @@ public class MainJFrame extends JFrame {
         rightSide = new JPanel();
         
         JPanel Menue = new JPanel();
+        
+        JPanel menue2 = new JPanel();
         
         JPanel words = new JPanel();
         
@@ -143,17 +145,21 @@ public class MainJFrame extends JFrame {
         contentPane.add(rightSide, BorderLayout.EAST);
         rightSide.setLayout(new BoxLayout(rightSide, BoxLayout.Y_AXIS));
         rightSide.add(Menue);
+        rightSide.add(menue2);
         rightSide.add(words);
         rightSide.add(searchPanel);
         
         words.add(topWords);
         
-        JLabel lblTweetDisplayTime = new JLabel("Tweet Display Time");
+        JLabel lblTweetDisplayTime = new JLabel("Tweet Display Time   ");
+        JLabel lblTweetRate =        new JLabel("Tweet Percentage Rate");
+        menue2.add(lblTweetRate);
         Menue.add(lblTweetDisplayTime);
         
         
         
         slider = new JSlider(0,200,30);
+        rateSlider = new JSlider(0, 100, 30);
         
         
 		slider.addChangeListener(new ChangeListener(){
@@ -176,8 +182,25 @@ public class MainJFrame extends JFrame {
         
         Menue.add(slider);
         
+		rateSlider.addChangeListener(new ChangeListener(){
+			public void stateChanged(ChangeEvent e){
+				int percent = (int)rateSlider.getValue();
+				tweetMap.changeRate(percent);
+				rateLabel.setText(percent + "%");
+			}
+		});
+		rateSlider.setMajorTickSpacing(50);
+		rateSlider.setMinorTickSpacing(10);
+		rateSlider.setPaintTicks(true);
+		rateSlider.setPaintLabels(true);
+        
+        menue2.add(rateSlider);
+        
+        rateLabel = new JLabel("30%");
         timeLabel = new JLabel("30");
         Menue.add(timeLabel);
+        menue2.add(rateLabel);
+        menue2.add(new JLabel("                        "));
         
         indeff = new JCheckBox("Indefinitly");
         

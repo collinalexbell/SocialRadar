@@ -10,6 +10,8 @@ import javax.swing.JFrame;
 
 import de.fhpotsdam.unfolding.marker.Marker;
 import de.fhpotsdam.unfolding.marker.MarkerManager;
+import de.fhpotsdam.unfolding.geo.*;
+import de.fhpotsdam.unfolding.geo.Location;
 
 import processing.core.*;
 
@@ -25,8 +27,15 @@ public class TweetMap{
 	 int pingTime;
 	 TopWord wordfq;
 	 List<SearchTerm> terms;
+	 Integer x1, x2, y1, y2;
+     Integer xreal, yreal, width, height;
+     boolean pressed = false;
+     public Double rate;
+     public Double sum;
 	  
 	  TweetMap(Twitter p, MarkerManager<Marker> m, MainJFrame f){
+		sum = 0.0;
+		rate = 0.3;
 	    pingTime = 30000;
 		parent = p;
 	    frame = f;
@@ -46,9 +55,10 @@ public class TweetMap{
 	  void deleteMarkers(){
 	    for (int i = 0; i < markersToDelete.size(); i++){
 	      if(markerManager.removeMarker(markersToDelete.get(i))){
-	       System.out.println("Removed Marker"); 
+	       //System.out.println("Removed Marker"); 
 	       if(statuses.remove(markersToDelete.get(i).status)){
-	    	   System.out.println("Removed Status");
+	    	 //  System.out.println("Removed Status");
+	    	   size--;
 	       }
 	      }
 	    }
@@ -97,6 +107,7 @@ public class TweetMap{
 	  
 	  public void draw(){
 		  displayTweet(markerstodisplay);
+		  drawBoundingBox();
 	  }
 	  
 	  public void setTimeToDisappear(int millsec){
@@ -146,8 +157,52 @@ public class TweetMap{
 	public void updateSearchTerms(List<SearchTerm> terms){
 		this.terms = terms;
 	}
-	  
-	  /*ArrayList<Ping> getPings(){
+	
+	public void drawBoundingBox(){
+		if (parent.mousePressed && parent.mouseButton == parent.LEFT && !pressed && parent.keyPressed == true){
+			x1 = x2 = parent.mouseX;
+			y1 = y2 = parent.mouseY;
+			pressed = true;
+			parent.map.setPanningRestriction(parent.map.getCenter(), 0);
+		}
+		
+		if (parent.mousePressed && pressed){
+			x2 = parent.mouseX;
+			y2 = parent.mouseY;
+
+				if (x1 < x2){
+					xreal = x1;
+					width = x2-x1;
+				}else{
+					xreal = x2;
+					width = x1 - x2;
+
+				}
+				if (y1 < y2){
+					yreal = y1;
+					height = y2-y1;
+				}else{
+					yreal = y2;
+					height = y1-y2;
+				}
+				parent.noFill();
+				parent.stroke(0);
+				parent.rect(xreal, yreal, width, height);
+		}
+		if (!parent.mousePressed && pressed){
+			parent.addBoundLocation(xreal,yreal, width, height);
+			parent.map.setPanningRestriction(new Location(0,0), 12000);
+			pressed = false;
+			System.out.println("SetBound");
+	    }
+	}
+	
+	public void changeRate(int r){
+		rate = ((double)(r))/100;
+		System.out.println(r + "   "+ rate);
+	}
+
+	/*ArrayList<Ping> getPings(){
 	    return pings;
 	  }*/
 	  

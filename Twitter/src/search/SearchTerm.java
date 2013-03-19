@@ -24,10 +24,6 @@ public class SearchTerm {
 		checkBox.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(((JCheckBox)e.getSource()).isSelected()){
-					color = ColorPicker.showDialog(frame, color);
-					checkBox.setForeground(color);
-				}
 			}
 		});
 	}

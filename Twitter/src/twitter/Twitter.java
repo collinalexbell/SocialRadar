@@ -16,6 +16,7 @@ import de.fhpotsdam.unfolding.*;
 import de.fhpotsdam.unfolding.core.*;
 import de.fhpotsdam.unfolding.data.*;
 import de.fhpotsdam.unfolding.geo.*;
+import de.fhpotsdam.unfolding.geo.Location;
 import de.fhpotsdam.unfolding.texture.*;
 import de.fhpotsdam.unfolding.events.*;
 import de.fhpotsdam.utils.*;
@@ -123,9 +124,11 @@ public class Twitter extends PApplet{
 		//        TwitterStream twitterStream = new TwitterStreamFactory().getInstance();
 		StatusListener listener = new StatusListener() {
 			public void onStatus(Status status) {
+				tweetMap.sum += tweetMap.rate;
 				//            	if (status.getUser().getLang().equals("en")) {
-				if(status.getGeoLocation()!= null){
+				if(status.getGeoLocation()!= null && tweetMap.sum >= 1){
 					tweetMap.addStatus(status);
+					tweetMap.sum = 0.0;
 				}	
 				//            	} else {
 				//            		System.out.println("NON-ENGLISH");
@@ -186,8 +189,8 @@ public class Twitter extends PApplet{
 		map.draw();
 		tweetMap.draw();
 
-
-		if (tweetMap.statusAvailable()){
+		int count = 0;
+		while (tweetMap.statusAvailable()){
 			currentStatus = tweetMap.getStatus();
 			GeoLocation location = currentStatus.getGeoLocation();
 			double lat = location.getLatitude();
@@ -198,6 +201,10 @@ public class Twitter extends PApplet{
 			PingMarker tweetMarker = new PingMarker(this, newLocation, tweetMap, currentStatus, color);
 			tweetMarker.status = currentStatus;
 			markerManager.addMarker(tweetMarker);
+			if(count == 5){
+				break;
+			}
+			count++;
 		}
 
 
@@ -234,8 +241,6 @@ public class Twitter extends PApplet{
 	public void updateSearchTerm(String [] terms){
 		if (terms.length > 0){
 			FilterQuery filterQuery = new FilterQuery();
-			double[][] locations ={{-180, -90}, {180, 90}};
-			//filterQuery.locations(locations);
 			filterQuery.track(terms);
 			twitterStream.filter(filterQuery);
 		}
@@ -244,4 +249,14 @@ public class Twitter extends PApplet{
 		}
 	}
 
+
+
+	public void addBoundLocation(Integer x1, Integer y1, Integer width, Integer height) {
+		Location bottomLeft = map.getLocation(x1, y1+height);
+		Location topRight = map.getLocation(x1+width, y1);
+		FilterQuery filterQuery = new FilterQuery();
+		double [][] locations = {{bottomLeft.getLon(), bottomLeft.getLat()}, {topRight.getLon(), topRight.getLat()}};
+		filterQuery.locations(locations);
+		twitterStream.filter(filterQuery);
+	}
 }
