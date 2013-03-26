@@ -76,11 +76,11 @@ public class MainJFrame extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		this.setSize(1450, 780);
+		this.setSize(1450, 900);
         contentPane.setLayout(new BorderLayout(0, 0));
         
         javax.swing.JPanel Map = new javax.swing.JPanel();
-        Map.setSize(950,700);
+        Map.setSize(950,750);
         contentPane.add(Map, BorderLayout.WEST);
         Twitter sketch = new Twitter(this);
         tweetMap = sketch.getTweetMap();

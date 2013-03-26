@@ -77,7 +77,7 @@ public class Twitter extends PApplet{
 	}
 
 	public void setup() {
-		size(950,700);
+		size(950,750);
 
 
 
