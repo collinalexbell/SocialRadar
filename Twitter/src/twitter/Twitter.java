@@ -91,10 +91,10 @@ public class Twitter extends PApplet{
 
 
 
-		OAuthConsumerKey = "5ZgQXBGYo4YSKLYxqM1XEA";
-		OAuthConsumerSecret = "E9nSuU2uJ2IAz0YavqdfT4fIJAhMcXC4gJkD94qVAs";
-		AccessToken = "426783140-ffLY7B4oRWwjNil6lXDdGtfKLxC5wg1hWtuYJNfy";
-		AccessTokenSecret = "xso5cpcuuU9FA4mQEm9OBzDhx83p0DMMZDJiaXuWTBM";
+		OAuthConsumerKey = "CKey";
+		OAuthConsumerSecret = "CSecret";
+		AccessToken ="AToken";
+		AccessTokenSecret = "ATSecret";
 
 
 
