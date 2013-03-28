@@ -1,4 +1,18 @@
+/**********************************
+ * Social Radar
+ * 
+ * (C) Copyright 2013
+ * 
+ * Collin Bell
+ * Oak Ridge National Lab
+ * University of Tennessee
+ * 
+ * All rights reserved
+ */
+
+
 package twitter;
+
 
 import java.awt.Color;
 import java.util.ArrayList;
