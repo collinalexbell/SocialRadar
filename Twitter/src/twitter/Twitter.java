@@ -15,6 +15,7 @@ package twitter;
 
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,11 +71,13 @@ public class Twitter extends PApplet{
 	MainJFrame parent;
 	TwitterStream twitterStream;
 	FilterQuery filterQuery;
+	Dimension screenSize;
 
-	Twitter(MainJFrame p){
+	Twitter(MainJFrame p, Dimension ss){
 		parent = p;
 		markerManager = new MarkerManager<Marker>();
 		tweetMap = new TweetMap(this, markerManager, parent);
+		screenSize = ss;
 	}
 
 
@@ -92,7 +95,7 @@ public class Twitter extends PApplet{
 	}
 
 	public void setup() {
-		size(950,750);
+		size((screenSize.width-100), (screenSize.width-100));
 
 
 
