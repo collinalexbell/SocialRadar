@@ -142,7 +142,7 @@ public class TweetMap{
 		String text = currentStatus.getText();
 		text = text.toLowerCase();
 		if (terms.size() == 0){
-			return new Color(102, 0, 186, 250);
+			return new Color(255, 255, 255, 150);
 		}else{
 			for (SearchTerm t: terms){
 				
@@ -151,7 +151,7 @@ public class TweetMap{
 				}
 			}
 		}
-		return new Color(102, 0, 186, 250);
+		return new Color(255, 255, 255, 150);
 	}
 	
 	public void updateSearchTerms(List<SearchTerm> terms){

@@ -36,6 +36,7 @@ import de.fhpotsdam.unfolding.events.*;
 import de.fhpotsdam.utils.*;
 import de.fhpotsdam.unfolding.providers.*;
 import de.fhpotsdam.unfolding.marker.MarkerManager;
+import de.fhpotsdam.unfolding.providers.OpenStreetMap.CloudmadeProvider;
 
 import processing.core.*;
 
@@ -53,11 +54,11 @@ import twitter4j.internal.http.*;
 import twitter4j.*;
 
 public class Twitter extends PApplet{
-	MarkerManager<Marker> markerManager; //= new MarkerManager<Marker>();
-	static String OAuthConsumerKey;// = "5ZgQXBGYo4YSKLYxqM1XEA";
-	static String OAuthConsumerSecret;// = "E9nSuU2uJ2IAz0YavqdfT4fIJAhMcXC4gJkD94qVAs";
-	static String AccessToken;// = "426783140-ffLY7B4oRWwjNil6lXDdGtfKLxC5wg1hWtuYJNfy";
-	static String AccessTokenSecret;// = "xso5cpcuuU9FA4mQEm9OBzDhx83p0DMMZDJiaXuWTBM";
+	MarkerManager<Marker> markerManager = new MarkerManager<Marker>();
+	static String OAuthConsumerKey = "5ZgQXBGYo4YSKLYxqM1XEA";
+	static String OAuthConsumerSecret = "E9nSuU2uJ2IAz0YavqdfT4fIJAhMcXC4gJkD94qVAs";
+	static String AccessToken  = "426783140-ffLY7B4oRWwjNil6lXDdGtfKLxC5wg1hWtuYJNfy";
+    static String AccessTokenSecret = "xso5cpcuuU9FA4mQEm9OBzDhx83p0DMMZDJiaXuWTBM";
 
 	//Twitter twitter = new TwitterFactory().getInstance();
 
@@ -98,17 +99,17 @@ public class Twitter extends PApplet{
 
 
 
-		map = new UnfoldingMap(this, "map", 0,0,1200,900);
+		map = new UnfoldingMap(this, new OpenStreetMap.CloudmadeProvider("8e87064c01204cf4a69d66fb7cd07f8a", 91577));
 		map.addMarkerManager(markerManager);
 		map.setZoomRange(2,6);
 		MapUtils.createDefaultEventDispatcher(this, map);
 
 
 
-		OAuthConsumerKey = "CKey";
-		OAuthConsumerSecret = "CSecret";
-		AccessToken ="AToken";
-		AccessTokenSecret = "ATSecret";
+		//OAuthConsumerKey = "CKey";
+		//OAuthConsumerSecret = "CSecret";
+		//AccessToken ="AToken";
+		//AccessTokenSecret = "ATSecret";
 
 
 

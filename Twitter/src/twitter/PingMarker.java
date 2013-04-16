@@ -2,6 +2,7 @@ package twitter;
 
 
 import java.awt.Color;
+import java.util.Random;
 
 import de.fhpotsdam.unfolding.marker.SimplePointMarker;
 import processing.core.*;
@@ -21,6 +22,8 @@ public class PingMarker extends SimplePointMarker {
 	  TweetMap tweetMap;
 	  boolean disapear;
 	  Color color;
+	  int lineLength;
+	  int dx, dy;
 	  
 	  public PingMarker(PApplet p, de.fhpotsdam.unfolding.geo.Location location, TweetMap t, Status s, Color c) {
 	    super(location);
@@ -28,12 +31,14 @@ public class PingMarker extends SimplePointMarker {
 	    status = s;
 	    tweetMap = t;
 	    parent = p;
-	    rad = 50;
+	    rad = 10;
 	    startTime = parent.millis();
 	    timeToDisapear = t.pingTime;
 	    transperancyRate = timeToDisapear/255;
 	    transValue =250;
 	    color = c;
+	    lineLength = 9;
+	    drawLine();
 	    
 	  }
 	 
@@ -61,7 +66,10 @@ public class PingMarker extends SimplePointMarker {
 	    	pg.fill(255, 136, 0);
 	    	tweetMap.markerstodisplay.add(this);
 	    }
-	    pg.ellipse(x, y, 10, 10);
+	    pg.stroke(255,255,255, 15);
+	    pg.line(x, y, x+dx, y+dy);
+	    pg.stroke(255,255,255, 100);
+	    pg.ellipse((int)Math.round(x),(int)Math.round(y), 1, 1);
 	    pg.popStyle();
 
 	  }
@@ -75,5 +83,13 @@ public class PingMarker extends SimplePointMarker {
 			  timeToDisapear = t;
 			  transperancyRate = timeToDisapear/255;
 		  }
+	  }
+	  
+	  public void drawLine(){
+		  Random random = new Random();
+		  int deg = random.nextInt()%360;
+		  dx = (int)(Math.cos(Math.toRadians(deg))*lineLength);
+		  dy = (int)(Math.sin(Math.toRadians(deg))*lineLength);
+		  System.out.println("deg: " + deg + ", dx: " + dx +", dy: " + dy);
 	  }
 }
