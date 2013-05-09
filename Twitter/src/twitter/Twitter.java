@@ -95,16 +95,16 @@ public class Twitter extends PApplet{
 	}
 
 	public void setup() {
-		size((screenSize.width-100), (screenSize.width-100));
+		size(((screenSize.width-100)/2), ((screenSize.width-100))/2);
 
 
 
 
 
 
-		map = new UnfoldingMap(this, new OpenStreetMap.CloudmadeProvider("8e87064c01204cf4a69d66fb7cd07f8a", 91577));
+		map = new UnfoldingMap(this, "map1");
 		map.addMarkerManager(markerManager);
-		map.setZoomRange(2,6);
+		//map.setZoomRange(2,6);
 		MapUtils.createDefaultEventDispatcher(this, map);
 
 
@@ -182,7 +182,10 @@ public class Twitter extends PApplet{
 		//      filterQuery.locations(locations);
 
 		filterQuery = new FilterQuery();
-		double[][] locations ={{-180, -90}, {180, 90}};
+		double[] knoxville = {-83.942222, 35.972778};
+	//	double[][] locations ={{-180, -90}, {180, 90}};
+		double[][] locations ={{knoxville[0]-.1 , knoxville[1]-.1}, {knoxville[0]+.1, knoxville[1]+.1}};
+		
 		
 		filterQuery.locations(locations);
 		
