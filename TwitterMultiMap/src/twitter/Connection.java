@@ -1,6 +1,7 @@
 package twitter;
 
 import data.HeatMap;
+import data.LiveMap;
 import data.Tweet;
 import twitter4j.conf.*;
 import twitter4j.internal.async.*;
@@ -16,7 +17,9 @@ public class Connection {
 	TwitterStream twitterStream;
 	TwitterStream heatMapStream;
 	FilterQuery heatMapFilter;
+	FilterQuery liveMapFilter;
 	HeatMap heatMap;
+	LiveMap liveMap;
 	static String OAuthConsumerKey = "5ZgQXBGYo4YSKLYxqM1XEA";
 	static String OAuthConsumerSecret = "E9nSuU2uJ2IAz0YavqdfT4fIJAhMcXC4gJkD94qVAs";
 	static String AccessToken  = "426783140-ffLY7B4oRWwjNil6lXDdGtfKLxC5wg1hWtuYJNfy";
@@ -27,7 +30,7 @@ public class Connection {
 	static String HMAccessToken  = "1413076735-xVLFflaLmcsYqAJZX34neUnmP2zxQGFofbK8Q3k";
     static String HMAccessTokenSecret = "kNiUFCxREtL1aQ6hPuG5i5i3uRPlIgzEQiTxBp4E";
 
-    public Connection(HeatMap h){
+    public Connection(HeatMap h, LiveMap l){
     	ConfigurationBuilder cb = new ConfigurationBuilder();
     	ConfigurationBuilder hm = new ConfigurationBuilder();
 		cb.setDebugEnabled(true);
@@ -43,6 +46,7 @@ public class Connection {
 		hm.setOAuthAccessTokenSecret(HMAccessTokenSecret);
 		
 		heatMap = h;
+		liveMap = l;
 		
 		
 		
@@ -56,6 +60,16 @@ public class Connection {
 		
 		StatusListener listener = new StatusListener() {
 			public void onStatus(Status status) {
+			
+				GeoLocation location = status.getGeoLocation();
+				if (location != null){
+					System.out.println(status.getText());
+					liveMap.addTweet(new Tweet(new de.fhpotsdam.unfolding.geo.Location(location.getLatitude(),location.getLongitude()),status.getText()));
+				}else{
+					System.out.println(status.getPlace());
+					System.out.println(status.getText());
+				}
+
 			}
 
 			public void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {
@@ -116,9 +130,17 @@ public class Connection {
 		heatMapStream.addListener(heatMapListener);
 		
 		double[][] world ={{-180, -90}, {180, 90}};
+		double[] knoxville = {-83.942222, 35.972778};
+		//	double[][] locations ={{-180, -90}, {180, 90}};
+		double[][] knx ={{knoxville[0]-.1 , knoxville[1]-.1}, {knoxville[0]+.1, knoxville[1]+.1}};
+
 		heatMapFilter = new FilterQuery();
 		heatMapFilter.locations(world);
 		
+		liveMapFilter = new FilterQuery();
+		liveMapFilter.locations(knx);
+		
+		twitterStream.filter(liveMapFilter);
 		heatMapStream.filter(heatMapFilter);
 		
 

@@ -21,11 +21,13 @@ public class HeatMap extends UnfoldingMap{
 	TreeMap<Integer, ArrayList<HeatBin>> sortedBins; //Used to index bins based off of tweet count
 	Integer numLat, numLon;
 	ArrayList<ArrayList<Point2D>> debins;
+	LiveMap liveMap;
 	
-	public HeatMap(PApplet parent,float a, float b, float c, float d, AbstractMapProvider prov, Double res){
+	public HeatMap(PApplet parent,float a, float b, float c, float d, AbstractMapProvider prov, Double res, LiveMap l){
 		super(parent,a,b,c,d,prov);
 		resolution = res;
 		buildBins();
+		liveMap = l;
 	}
 	
 	public void buildBins(){
@@ -67,6 +69,27 @@ public class HeatMap extends UnfoldingMap{
 				}
 			}
 		}
+		drawLiveBox();
+	}
+	
+	public void drawLiveBox(){
+		// Used to find bound box
+		Location topLeft = liveMap.getTopLeftBorder();
+		Location botRight = liveMap.getBottomRightBorder();
+		
+		//Convert bound box to pixels
+		ScreenPosition topLeftPos = this.getScreenPosition(topLeft);
+		ScreenPosition botRightPos = this.getScreenPosition(botRight);
+		
+		//Translate two points to a point and a width
+		float boxWidth = botRightPos.x-topLeftPos.x;
+		float boxHeight = botRightPos.y-topLeftPos.y;
+		
+		p.stroke(119,255,115);
+		p.fill(255,255,255,0);
+		p.rect(topLeftPos.x, topLeftPos.y, boxWidth, boxHeight);
+		
+		
 	}
 
 	
