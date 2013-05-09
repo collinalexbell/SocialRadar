@@ -15,6 +15,7 @@ package twitter;
 
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,11 +71,13 @@ public class Twitter extends PApplet{
 	MainJFrame parent;
 	TwitterStream twitterStream;
 	FilterQuery filterQuery;
+	Dimension screenSize;
 
-	Twitter(MainJFrame p){
+	Twitter(MainJFrame p, Dimension ss){
 		parent = p;
 		markerManager = new MarkerManager<Marker>();
 		tweetMap = new TweetMap(this, markerManager, parent);
+		screenSize = ss;
 	}
 
 
@@ -92,16 +95,16 @@ public class Twitter extends PApplet{
 	}
 
 	public void setup() {
-		size(950,750);
+		size(((screenSize.width-100)/2), ((screenSize.width-100))/2);
 
 
 
 
 
 
-		map = new UnfoldingMap(this, new OpenStreetMap.CloudmadeProvider("8e87064c01204cf4a69d66fb7cd07f8a", 91577));
+		map = new UnfoldingMap(this, "map1");
 		map.addMarkerManager(markerManager);
-		map.setZoomRange(2,6);
+		//map.setZoomRange(2,6);
 		MapUtils.createDefaultEventDispatcher(this, map);
 
 
@@ -179,7 +182,10 @@ public class Twitter extends PApplet{
 		//      filterQuery.locations(locations);
 
 		filterQuery = new FilterQuery();
-		double[][] locations ={{-180, -90}, {180, 90}};
+		double[] knoxville = {-83.942222, 35.972778};
+	//	double[][] locations ={{-180, -90}, {180, 90}};
+		double[][] locations ={{knoxville[0]-.1 , knoxville[1]-.1}, {knoxville[0]+.1, knoxville[1]+.1}};
+		
 		
 		filterQuery.locations(locations);
 		

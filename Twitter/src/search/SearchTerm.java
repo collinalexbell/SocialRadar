@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 
-import com.bric.swing.ColorPicker;
+//import com.bric.swing.ColorPicker;
 
 public class SearchTerm {
 	JCheckBox checkBox;

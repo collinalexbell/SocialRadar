@@ -24,10 +24,14 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import javax.swing.JSlider;
 import javax.swing.JTextPane;
+
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -58,7 +62,6 @@ public class MainJFrame extends JFrame {
 			public void run() {
 				try {
 					MainJFrame frame = new MainJFrame();
-					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -70,118 +73,128 @@ public class MainJFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public MainJFrame() {
-	
+		JFrame sideFrame = new JFrame();
+		sideFrame.setSize(500, 500);
+		GraphicsEnvironment g = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		GraphicsDevice[] devices = g.getScreenDevices();
+
+		Integer mapW = devices[0].getDisplayMode().getWidth();
+		Integer mapH = devices[0].getDisplayMode().getHeight();
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		this.setSize(1450, 900);
-        contentPane.setLayout(new BorderLayout(0, 0));
-        
-        javax.swing.JPanel Map = new javax.swing.JPanel();
-        Map.setSize(950,750);
-        contentPane.add(Map, BorderLayout.WEST);
-        Twitter sketch = new Twitter(this);
-        tweetMap = sketch.getTweetMap();
-        Map.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-        sketch.screen = new Dimension(950, 700);
-        Map.add(sketch);
-    	searchPanel = new SearchPanel(this); 
-        rightSide = new JPanel();
-        
-        JPanel Menue = new JPanel();
-        
-        JPanel menue2 = new JPanel();
-        
-        JPanel words = new JPanel();
-        
-        JPanel Tweet = new JPanel();
-        
-        JPanel SearchFilter = new JPanel();
-        
-       
-        
-        
-        textPane = new JTextPane(); 
-        
-        
-        textPane.setEditable(false);
-        
-        textPane.setBackground(this.getBackground());
-        
-         keySearch = new JTextField();
-        keySearch.setColumns(10); 
-        keySearch.setEditable(true);
-        
-        searchLabel = new JLabel ("Search terms:");
-        
-        
-        JButton searchButton = new JButton ("Submit");
+		this.setSize(mapW, mapH);
+		this.setVisible(true);
+		sideFrame.setVisible(true);
+		//this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		Dimension screenSize = new Dimension(mapW, mapH);
+		System.out.println("X: " + screenSize.width +" Y: " + screenSize.height);
+		contentPane.setLayout(new BorderLayout(0, 0));
 
-            ActionListener submitListener = new ActionListener() {
-              public void actionPerformed(ActionEvent actionEvent) {
-            	  String [] terms = new String[1];
-            	  terms[0] = keySearch.getText();
-            	  System.out.println(keySearch.getText());
-              }
-            };
-            
-       searchButton.addActionListener(submitListener);
-        
-       SearchFilter.add(searchLabel);
-       SearchFilter.add(keySearch);
-       SearchFilter.add(searchButton);
-        
-        
-        topWords = new JTextPane();
-        topWords.setEditable(false);
-        
-        topWords.setBackground(this.getBackground());
-               
+		javax.swing.JPanel Map = new javax.swing.JPanel();
+		contentPane.add(Map, BorderLayout.WEST);
+		Twitter sketch = new Twitter(this, screenSize);
+		tweetMap = sketch.getTweetMap();
+		Map.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		//sketch.screen = new Dimension(950, 700);
+		Map.add(sketch);
+		searchPanel = new SearchPanel(this); 
+		rightSide = new JPanel();
 
-        Tweet.add(textPane);
-        contentPane.add(Tweet, BorderLayout.SOUTH);
-        contentPane.add(rightSide, BorderLayout.EAST);
-        rightSide.setLayout(new BoxLayout(rightSide, BoxLayout.Y_AXIS));
-        rightSide.add(Menue);
-        rightSide.add(menue2);
-        rightSide.add(words);
-        rightSide.add(searchPanel);
-        
-        words.add(topWords);
-        
-        JLabel lblTweetDisplayTime = new JLabel("Tweet Display Time   ");
-        JLabel lblTweetRate =        new JLabel("Tweet Percentage Rate");
-        menue2.add(lblTweetRate);
-        Menue.add(lblTweetDisplayTime);
-        
-        
-        
-        slider = new JSlider(0,200,30);
-        rateSlider = new JSlider(0, 100, 30);
-        
-        
+		JPanel Menue = new JPanel();
+
+		JPanel menue2 = new JPanel();
+
+		JPanel words = new JPanel();
+
+		JPanel Tweet = new JPanel();
+
+		JPanel SearchFilter = new JPanel();
+
+
+
+
+		textPane = new JTextPane(); 
+
+
+		textPane.setEditable(false);
+
+		textPane.setBackground(this.getBackground());
+
+		keySearch = new JTextField();
+		keySearch.setColumns(10); 
+		keySearch.setEditable(true);
+
+		searchLabel = new JLabel ("Search terms:");
+
+
+		JButton searchButton = new JButton ("Submit");
+
+		ActionListener submitListener = new ActionListener() {
+			public void actionPerformed(ActionEvent actionEvent) {
+				String [] terms = new String[1];
+				terms[0] = keySearch.getText();
+				System.out.println(keySearch.getText());
+			}
+		};
+
+		searchButton.addActionListener(submitListener);
+
+		SearchFilter.add(searchLabel);
+		SearchFilter.add(keySearch);
+		SearchFilter.add(searchButton);
+
+
+		topWords = new JTextPane();
+		topWords.setEditable(false);
+
+		topWords.setBackground(this.getBackground());
+
+
+		Tweet.add(textPane);
+		sideFrame.add(Tweet, BorderLayout.SOUTH);
+		sideFrame.add(rightSide, BorderLayout.EAST);
+		rightSide.setLayout(new BoxLayout(rightSide, BoxLayout.Y_AXIS));
+		rightSide.add(Menue);
+		rightSide.add(menue2);
+		rightSide.add(words);
+		rightSide.add(searchPanel);
+		words.add(topWords);
+
+		JLabel lblTweetDisplayTime = new JLabel("Tweet Display Time   ");
+		JLabel lblTweetRate =        new JLabel("Tweet Percentage Rate");
+		menue2.add(lblTweetRate);
+		Menue.add(lblTweetDisplayTime);
+
+
+
+		slider = new JSlider(0,200,30);
+		rateSlider = new JSlider(0, 100, 30);
+
+
 		slider.addChangeListener(new ChangeListener(){
 			public void stateChanged(ChangeEvent e){
-			    //if (!source.getValueIsAdjusting()) {
-			    int millis = ((int)slider.getValue())*1000;    
+				//if (!source.getValueIsAdjusting()) {
+				int millis = ((int)slider.getValue())*1000;    
 				if (!indeff.isSelected()){
 					tweetMap.setTimeToDisappear(millis);
 				}
-			    timeLabel.setText(((Integer)(millis/1000)).toString());
-			    
-			        
-			    //}
-			}
+				timeLabel.setText(((Integer)(millis/1000)).toString());
+
+
+				//}
+		}
 		});
 		slider.setMajorTickSpacing(50);
 		slider.setMinorTickSpacing(10);
 		slider.setPaintTicks(true);
 		slider.setPaintLabels(true);
-        
-        Menue.add(slider);
-        
+
+		Menue.add(slider);
+
 		rateSlider.addChangeListener(new ChangeListener(){
 			public void stateChanged(ChangeEvent e){
 				int percent = (int)rateSlider.getValue();
@@ -193,38 +206,38 @@ public class MainJFrame extends JFrame {
 		rateSlider.setMinorTickSpacing(10);
 		rateSlider.setPaintTicks(true);
 		rateSlider.setPaintLabels(true);
-        
-        menue2.add(rateSlider);
-        
-        rateLabel = new JLabel("30%");
-        timeLabel = new JLabel("30");
-        Menue.add(timeLabel);
-        menue2.add(rateLabel);
-        menue2.add(new JLabel("                        "));
-        
-        indeff = new JCheckBox("Indefinitly");
-        
-        ActionListener indeffListener = new ActionListener(){
-        	public void actionPerformed(ActionEvent e){
-        		if (indeff.isSelected()){
-        			tweetMap.setTimeToDisappear(-1);
-        		}
-        		else{
-			    JSlider source = slider; 
-			    //if (!source.getValueIsAdjusting()) {
-			    int millis = ((int)source.getValue())*1000;    
-				tweetMap.setTimeToDisappear(millis);
-			    timeLabel.setText(((Integer)(millis/1000)).toString());
+
+		menue2.add(rateSlider);
+
+		rateLabel = new JLabel("30%");
+		timeLabel = new JLabel("30");
+		Menue.add(timeLabel);
+		menue2.add(rateLabel);
+		menue2.add(new JLabel("                        "));
+
+		indeff = new JCheckBox("Indefinitly");
+
+		ActionListener indeffListener = new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				if (indeff.isSelected()){
+					tweetMap.setTimeToDisappear(-1);
 				}
-        			
-        	}
-        };
-        
-        indeff.addActionListener(indeffListener);
-        
-        Menue.add(indeff);
-        sketch.init(); //this is the function used to start the execution of the sketch
-        this.setVisible(true);
+				else{
+					JSlider source = slider; 
+					//if (!source.getValueIsAdjusting()) {
+					int millis = ((int)source.getValue())*1000;    
+					tweetMap.setTimeToDisappear(millis);
+					timeLabel.setText(((Integer)(millis/1000)).toString());
+				}
+
+			}
+		};
+
+		indeff.addActionListener(indeffListener);
+
+		Menue.add(indeff);
+		sketch.init(); //this is the function used to start the execution of the sketch
+		this.setVisible(true);
 	}
 
 	public void updateTweet(String text){
@@ -233,16 +246,16 @@ public class MainJFrame extends JFrame {
 		}
 		prevTweet = text;
 	}
-	
+
 	public void updateTopWord(){
 		topWords.setText(tweetMap.getTopWords(20));
 	}
-	
+
 	public void updateFilter(){
 		String terms[] = searchPanel.getTerms().toArray(new String[searchPanel.getTermsSize()]);
 		tweetMap.parent.updateSearchTerm(terms);
 	}
-	
+
 	public TweetMap getTweetMap(){
 		return tweetMap;
 	}

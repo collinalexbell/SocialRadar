@@ -19,7 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import com.bric.swing.ColorPicker;
+//import com.bric.swing.ColorPicker;
 
 
 public class SearchPanel extends JPanel{
@@ -124,7 +124,8 @@ public class SearchPanel extends JPanel{
 	}
 	
 	private void addTerm(){
-		Color color = ColorPicker.showDialog((JFrame)parent, new Color(255,255,255));
+		//Color color = ColorPicker.showDialog((JFrame)parent, new Color(255,255,255));
+		Color color = new Color(255,255,255);
 		searchTerms.add(new SearchTerm(key.getText(), parent, color));
 		tweetMap.updateSearchTerms(searchTerms);
     	parent.updateFilter();
