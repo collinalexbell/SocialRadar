@@ -1,5 +1,7 @@
 package twitter;
 
+import data.HeatMap;
+import data.Tweet;
 import twitter4j.conf.*;
 import twitter4j.internal.async.*;
 import twitter4j.internal.org.json.*;
@@ -14,6 +16,7 @@ public class Connection {
 	TwitterStream twitterStream;
 	TwitterStream heatMapStream;
 	FilterQuery heatMapFilter;
+	HeatMap heatMap;
 	static String OAuthConsumerKey = "5ZgQXBGYo4YSKLYxqM1XEA";
 	static String OAuthConsumerSecret = "E9nSuU2uJ2IAz0YavqdfT4fIJAhMcXC4gJkD94qVAs";
 	static String AccessToken  = "426783140-ffLY7B4oRWwjNil6lXDdGtfKLxC5wg1hWtuYJNfy";
@@ -24,7 +27,7 @@ public class Connection {
 	static String HMAccessToken  = "1413076735-xVLFflaLmcsYqAJZX34neUnmP2zxQGFofbK8Q3k";
     static String HMAccessTokenSecret = "kNiUFCxREtL1aQ6hPuG5i5i3uRPlIgzEQiTxBp4E";
 
-    public Connection(){
+    public Connection(HeatMap h){
     	ConfigurationBuilder cb = new ConfigurationBuilder();
     	ConfigurationBuilder hm = new ConfigurationBuilder();
 		cb.setDebugEnabled(true);
@@ -38,6 +41,10 @@ public class Connection {
 		hm.setOAuthConsumerSecret(HMOAuthConsumerSecret);
 		hm.setOAuthAccessToken(HMAccessToken);
 		hm.setOAuthAccessTokenSecret(HMAccessTokenSecret);
+		
+		heatMap = h;
+		
+		
 		
 		
 		
@@ -76,7 +83,10 @@ public class Connection {
 		
 		StatusListener heatMapListener = new StatusListener() {
 			public void onStatus(Status status) {
-				System.out.println(status.getText());
+				GeoLocation location = status.getGeoLocation();
+				if (location != null){
+					heatMap.addTweet(new Tweet(new de.fhpotsdam.unfolding.geo.Location(location.getLatitude(),location.getLongitude()),status.getText()));
+				}
 			}
 
 			public void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {

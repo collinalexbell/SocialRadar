@@ -32,7 +32,6 @@ public class MapDisplay extends PApplet{
 		maps = new ArrayList<UnfoldingMap>();
 		
 		//INIT connection
-		connection = new Connection();
 		
 	}
 	
@@ -52,12 +51,15 @@ public class MapDisplay extends PApplet{
 		background(0);
 		for (UnfoldingMap map:maps){
 			map.draw();
+			if(map instanceof HeatMap){
+				((HeatMap)map).drawMe();
+			}
 		}
 	}
 	
 	public void addMap(){
 			//------ADD HEAT MAP- last arg is resolution
-			maps.add(new HeatMap(this, 0,2*h/3,w/2,h/3,new OpenStreetMap.CloudmadeProvider("8e87064c01204cf4a69d66fb7cd07f8a", 91577),1.0));
+			maps.add(new HeatMap(this, 0,2*h/3,w/2,h/3,new OpenStreetMap.CloudmadeProvider("8e87064c01204cf4a69d66fb7cd07f8a", 91577),.5));
 			maps.get(0).zoomAndPanTo(new Location(15,10), 2);
 			maps.add(new UnfoldingMap(this,"map2", w/2,2*h/3,w/2,h/3));
 			Location knoxville = new Location(35.972778, -83.942222);
@@ -67,5 +69,7 @@ public class MapDisplay extends PApplet{
 		for (UnfoldingMap map: maps){
 			MapUtils.createDefaultEventDispatcher(this, map);
 		}
+		connection = new Connection((HeatMap)maps.get(0));
+		
 	}
 }

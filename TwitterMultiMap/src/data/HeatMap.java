@@ -1,5 +1,7 @@
 package data;
 
+import java.awt.Point;
+import java.awt.geom.Point2D;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -11,12 +13,14 @@ import processing.core.PApplet;
 import de.fhpotsdam.unfolding.UnfoldingMap;
 import de.fhpotsdam.unfolding.geo.Location;
 import de.fhpotsdam.unfolding.providers.AbstractMapProvider;
+import de.fhpotsdam.unfolding.utils.ScreenPosition;
 
 public class HeatMap extends UnfoldingMap{
 	Double resolution;
 	ArrayList<ArrayList<HeatBin>> bins; // Used to index bins when needed by geo-order
 	TreeMap<Integer, ArrayList<HeatBin>> sortedBins; //Used to index bins based off of tweet count
 	Integer numLat, numLon;
+	ArrayList<ArrayList<Point2D>> debins;
 	
 	public HeatMap(PApplet parent,float a, float b, float c, float d, AbstractMapProvider prov, Double res){
 		super(parent,a,b,c,d,prov);
@@ -30,10 +34,13 @@ public class HeatMap extends UnfoldingMap{
 		
 		
 		bins = new ArrayList<ArrayList<HeatBin>>();
+		debins = new ArrayList<ArrayList<Point2D>>();
 		for (int i = 0; i < numLat; i++){
 			bins.add(new ArrayList<HeatBin>());
+			debins.add(new ArrayList<Point2D>());
 			for (int j = 0; j < numLon; j++){
-				bins.get(i).add(new HeatBin());
+				bins.get(i).add(new HeatBin(this));
+				debins.get(i).add(debinify(i,j));
 			}
 		}
 	}
@@ -43,8 +50,27 @@ public class HeatMap extends UnfoldingMap{
 	}
 	
 	public void addTweet(Tweet tweet){
-		float tweetLat = tweet.location.x;
-		float tweetLon = tweet.location.y;
+		
+		int indices[] = binify(tweet.location.x, tweet.location.y);
+		bins.get(indices[0]).get(indices[1]).addTweet(tweet);
+	}
+	
+	public void drawMe(){
+		for (int i = 0; i < bins.size(); i++){
+			for (int j = 0; j < bins.get(0).size(); j++){
+				if (bins.get(i).get(j).getSize() > 0){
+					Location loc = new Location (debins.get(i).get(j).getX(),debins.get(i).get(j).getY());
+					ScreenPosition pos = getScreenPosition(loc);
+					p.stroke(255,255,255);
+					p.fill(255,255,255);
+					p.ellipse(pos.x,pos.y, 2, 2);
+				}
+			}
+		}
+	}
+
+	
+	public int[] binify(float tweetLat, float tweetLon){
 		//Handle Negatives
 		if (tweetLat < 0){
 			tweetLat = Math.abs(tweetLat) + 90;
@@ -60,6 +86,28 @@ public class HeatMap extends UnfoldingMap{
 		if (latIndex == 180){latIndex = 0;}
 		if (lonIndex == 360){lonIndex = 0;}
 		
+		int rv[] = {latIndex, lonIndex};
+		return rv;
+		//System.out.print("Latitude Index:" + latIndex);
+		//System.out.print("Longitude Index:" + lonIndex);
+		//bins.get(latIndex).get(lonIndex).addTweet(tweet);
+	}
+	
+	public Point2D debinify(int tweetLat, int tweetLon){
+		double lat = tweetLat * resolution;
+		double lon = tweetLon * resolution;
+		
+		//Handle Negatives
+		if (lat > 90){
+			lat = -1*(lat-90);
+		}
+		if (lon > 180){
+			lon = -1*(lon-180);
+		}
+		
+		
+		Point2D rv = new Point2D.Double(lat, lon);
+		return rv;
 		//System.out.print("Latitude Index:" + latIndex);
 		//System.out.print("Longitude Index:" + lonIndex);
 		//bins.get(latIndex).get(lonIndex).addTweet(tweet);
