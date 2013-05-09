@@ -66,9 +66,9 @@ public class PingMarker extends SimplePointMarker {
 	    	pg.fill(255, 136, 0);
 	    	tweetMap.markerstodisplay.add(this);
 	    }
-	    pg.stroke(255,255,255, 15);
+	    pg.stroke(0,0,0, 15);
 	    pg.line(x, y, x+dx, y+dy);
-	    pg.stroke(255,255,255, 100);
+	    pg.stroke(0,0,0, 100);
 	    pg.ellipse((int)Math.round(x),(int)Math.round(y), 1, 1);
 	    pg.popStyle();
 
