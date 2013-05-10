@@ -27,4 +27,18 @@ public class MapPanel extends JPanel{
 		
 		
 	}
+
+	public void saveInstance() {
+		display.saveInstance();
+		
+	}
+
+	public void loadInstance() {
+		display.loadInstance();
+		
+	}
+
+	public void cycleInstances(Integer seconds) {
+		display.cycleInstances(seconds);
+	}
 }

@@ -15,13 +15,14 @@ public class LiveMap extends UnfoldingMap {
 		tweets = new ArrayList<Tweet>();
 	}
 	
-	public void addTweet(Tweet tweet){
+	synchronized public void addTweet(Tweet tweet){
 		tweets.add(tweet);
 		tweet.setFade(20);
 	}
 	
-	public void drawMe(){
+	synchronized public void drawMe(){
 		int x = 0;
+		
 		for (Tweet t: tweets){
 			ScreenPosition pos = getScreenPosition(t.location);
 			p.fill(0,0,0);

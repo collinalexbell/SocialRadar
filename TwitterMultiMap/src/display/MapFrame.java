@@ -33,6 +33,10 @@ public class MapFrame extends JFrame{
 		add(map);
 	}
 	
+	public void saveInstance(){
+		map.saveInstance();
+	}
+	
 	public void addMenu(){
 		
 	}
@@ -57,6 +61,16 @@ public class MapFrame extends JFrame{
 		
 		//----TURN ON SCREENS----
 		addMap();
+		
+	}
+
+	public void loadInstance() {
+		map.loadInstance();
+		
+	}
+
+	public void cycleInstances(Integer seconds) {
+		map.cycleInstances(seconds);
 		
 	}
 	

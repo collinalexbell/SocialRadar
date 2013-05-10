@@ -13,21 +13,29 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 public class JFrameMenu extends JFrame{
 	JPanel screenSelect;
+	JPanel displayInstances;
 	JPanel addMapPanel;
 	JPanel contentPane;
 	MapFrame mapFrame;
+	Integer cycleSeconds;
 	
 	public JFrameMenu(){
 		contentPane = new JPanel();
 		this.setContentPane(contentPane);
 		screenSelect = new JPanel();
+		displayInstances = new JPanel();
 		addMapPanel = new JPanel();
 		screenSelectRefresh();
+		addDisplayInstancesPanel();
 		addMapListen();
 		contentPane.add(screenSelect);
+		contentPane.add(displayInstances);
 		contentPane.add(addMapPanel);
 		setSize(500,500);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -72,6 +80,52 @@ public class JFrameMenu extends JFrame{
 			}
 		});
 		addMapPanel.add(button);
+	}
+	
+	public void addDisplayInstancesPanel(){
+		JButton button = new JButton("Save Display Instance");
+		button.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				mapFrame.saveInstance();
+			}
+		});
+		
+		JButton button2 = new JButton("Load Last Display Instance");
+		button2.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				mapFrame.loadInstance();
+			}
+		});
+		
+		JButton button3 = new JButton("Cycle Through Instances");
+		button3.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				mapFrame.cycleInstances(cycleSeconds);
+			}
+		});
+		
+		int maxCycleTime = 20;
+		int minCycleTime = 3;
+		int cycleTimeInit = 10;
+		
+		JSlider chooseCycleTime = new JSlider(JSlider.HORIZONTAL,minCycleTime, maxCycleTime,cycleTimeInit );
+		
+				
+		class SliderListener implements ChangeListener{
+			public void stateChanged(ChangeEvent e){
+				JSlider source = (JSlider)e.getSource();
+				if(!source.getValueIsAdjusting()){
+					cycleSeconds = (Integer)source.getValue() *1000;
+				}
+			}
+		}
+		
+		chooseCycleTime.addChangeListener(new SliderListener());
+		
+		displayInstances.add(button);
+		displayInstances.add(button2);
+		displayInstances.add(button3);
+		displayInstances.add(chooseCycleTime);
 	}
 	
 	public static void main(String[] args) {
