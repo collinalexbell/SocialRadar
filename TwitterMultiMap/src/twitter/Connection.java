@@ -3,6 +3,7 @@ package twitter;
 import data.HeatMap;
 import data.LiveMap;
 import data.Tweet;
+import de.fhpotsdam.unfolding.geo.Location;
 import twitter4j.conf.*;
 import twitter4j.internal.async.*;
 import twitter4j.internal.org.json.*;
@@ -145,4 +146,12 @@ public class Connection {
 		
 
     }
+
+	public void changLiveFilter(Location topLeft, Location botRight) {
+		
+		double[][] loc = {{topLeft.y, botRight.x}, {botRight.y, topLeft.x}};
+		liveMapFilter = new FilterQuery();
+		liveMapFilter.locations(loc);
+		twitterStream.filter(liveMapFilter);
+	}
 }

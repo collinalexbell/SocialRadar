@@ -87,7 +87,7 @@ public class MapDisplay extends PApplet{
 			maps.add(new LiveMap(this,"map2", 0,h/2,w,h/2));
 			Location knoxville = new Location(35.972778, -83.942222);
 			maps.get(0).zoomAndPanTo(knoxville, 9);
-			maps.add(new HeatMap(this, 0,0,w,h/2,new OpenStreetMap.CloudmadeProvider("8e87064c01204cf4a69d66fb7cd07f8a", 91577),.5,(LiveMap)maps.get(0)));
+			maps.add(new HeatMap(this, 0,0,w,h/2,new OpenStreetMap.CloudmadeProvider("8e87064c01204cf4a69d66fb7cd07f8a", 91577),.2,(LiveMap)maps.get(0)));
 			maps.get(1).zoomAndPanTo(new Location(15,10), 2);
 			//maps.add(new UnfoldingMap(this, 0,0,w,2*h/3,new OpenStreetMap.CloudmadeProvider("8e87064c01204cf4a69d66fb7cd07f8a", 73072)));
 			//maps.get(2).zoomAndPanTo(new Location(39.099, -94.578), 5);
@@ -146,9 +146,14 @@ public class MapDisplay extends PApplet{
 			hmLocation = current.getHmLocation();
 			lmZoom = current.getLmZoom();
 			hmZoom = current.getHmZoom();
+			
 
+			((LiveMap)(maps.get(0))).clearTweets();
 			maps.get(0).zoomAndPanTo(lmLocation,lmZoom);
 			maps.get(1).zoomAndPanTo(hmLocation, hmZoom);
+			Location topLeft = maps.get(0).getTopLeftBorder();
+			Location botRight = maps.get(0).getBottomRightBorder();
+			connection.changLiveFilter(topLeft, botRight);
 			currentInstance++;
 		}
 	}

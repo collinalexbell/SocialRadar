@@ -25,15 +25,20 @@ public class LiveMap extends UnfoldingMap {
 		
 		for (Tweet t: tweets){
 			ScreenPosition pos = getScreenPosition(t.location);
-			p.fill(0,0,0);
+			p.fill(176,28,31);
 			p.stroke(0,0,0);
-			p.ellipse(pos.x, pos.y, 4, 4);
 			x++;
 			int f = t.fade();
 			if (f > 0){
 				p.ellipse(pos.x, pos.y, f, f);
+				p.textSize(12);
+				p.text(t.text, pos.x, pos.y + 50);
 			}
 		}
+	}
+	
+	synchronized public void clearTweets(){
+		tweets.clear();
 	}
 	
 }

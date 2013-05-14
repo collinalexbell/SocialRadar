@@ -22,6 +22,7 @@ public class HeatMap extends UnfoldingMap{
 	Integer numLat, numLon;
 	ArrayList<ArrayList<Point2D>> debins;
 	LiveMap liveMap;
+	HeatBin maxBin;
 	
 	public HeatMap(PApplet parent,float a, float b, float c, float d, AbstractMapProvider prov, Double res, LiveMap l){
 		super(parent,a,b,c,d,prov);
@@ -45,6 +46,7 @@ public class HeatMap extends UnfoldingMap{
 				debins.get(i).add(debinify(i,j));
 			}
 		}
+		maxBin = bins.get(0).get(0);
 	}
 	
 	public void print(){
@@ -54,7 +56,11 @@ public class HeatMap extends UnfoldingMap{
 	public void addTweet(Tweet tweet){
 		
 		int indices[] = binify(tweet.location.x, tweet.location.y);
-		bins.get(indices[0]).get(indices[1]).addTweet(tweet);
+		HeatBin temp = bins.get(indices[0]).get(indices[1]).addTweet(tweet);
+		if (maxBin.getSize() < temp.getSize()){
+			maxBin = temp;
+		}
+		
 	}
 	
 	public void drawMe(){
@@ -63,8 +69,10 @@ public class HeatMap extends UnfoldingMap{
 				if (bins.get(i).get(j).getSize() > 0){
 					Location loc = new Location (debins.get(i).get(j).getX(),debins.get(i).get(j).getY());
 					ScreenPosition pos = getScreenPosition(loc);
-					p.stroke(255,255,255);
+					double scale = ((double)(bins.get(i).get(j).getSize())/(double)(maxBin.getSize()));
+					//System.out.println(scale);
 					p.fill(255,255,255);
+					p.stroke(255,255,255);
 					p.ellipse(pos.x,pos.y, 2, 2);
 				}
 			}

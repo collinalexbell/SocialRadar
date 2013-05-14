@@ -16,7 +16,8 @@ public class HeatBin {
 		return tweets.size();
 	}
 
-	public void addTweet(Tweet tweet) {
+	public HeatBin addTweet(Tweet tweet) {
 		tweets.add(tweet);
+		return this;
 	}
 }

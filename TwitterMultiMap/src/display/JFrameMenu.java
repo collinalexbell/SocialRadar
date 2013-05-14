@@ -37,9 +37,11 @@ public class JFrameMenu extends JFrame{
 		contentPane.add(screenSelect);
 		contentPane.add(displayInstances);
 		contentPane.add(addMapPanel);
+		cycleSeconds = 25;
 		setSize(500,500);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
+		this.pack();
 	}
 	
 	public void screenSelectRefresh(){
@@ -79,7 +81,7 @@ public class JFrameMenu extends JFrame{
 				mapFrame.addMap();
 			}
 		});
-		addMapPanel.add(button);
+		//addMapPanel.add(button);
 	}
 	
 	public void addDisplayInstancesPanel(){
@@ -125,7 +127,7 @@ public class JFrameMenu extends JFrame{
 		displayInstances.add(button);
 		displayInstances.add(button2);
 		displayInstances.add(button3);
-		displayInstances.add(chooseCycleTime);
+		//displayInstances.add(chooseCycleTime);
 	}
 	
 	public static void main(String[] args) {
